@@ -1,0 +1,198 @@
+{% extends "admin/base.html" %}
+{% set active_page = 'dashboard' %}
+
+{% block title %}Дашборд - Бронь Кинг{% endblock %}
+{% block page_title %}Дашборд{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/admin/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <!-- Приветствие -->
+    <div class="welcome-section">
+        <div class="welcome-text">
+            <h1><span id="greetingText">Добрый день</span>, <span id="userName">Администратор</span>!</h1>
+            <p id="todaySummary">Загрузка данных...</p>
+        </div>
+        <div class="quick-stats">
+            <div class="quick-stat">
+                <div class="quick-stat-value" id="activeBookings">0</div>
+                <div class="quick-stat-label">активных броней</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-value" id="occupancyRate">0%</div>
+                <div class="quick-stat-label">загрузка</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI сетка -->
+    <div class="kpi-grid">
+        <div class="kpi-card tooltip-hint" data-kpi-link="/admin/rooms" data-tooltip="Управление номерами">
+            <div class="kpi-icon" style="background: #6366f1;"><i class="fas fa-door-open"></i></div>
+            <div class="kpi-value" id="totalRooms">0</div>
+            <div class="kpi-label">Всего номеров</div>
+            <div class="kpi-trend"><span id="occupiedRooms">0</span> занято</div>
+        </div>
+        <div class="kpi-card tooltip-hint" data-kpi-link="/admin/guests" data-tooltip="Управление гостями">
+            <div class="kpi-icon" style="background: #10b981;"><i class="fas fa-users"></i></div>
+            <div class="kpi-value" id="totalGuests">0</div>
+            <div class="kpi-label">Всего гостей</div>
+            <div class="kpi-trend"><span id="vipGuests">0</span> VIP</div>
+        </div>
+        <div class="kpi-card tooltip-hint" data-kpi-link="/admin/bookings" data-tooltip="Бронирования">
+            <div class="kpi-icon" style="background: #f59e0b;"><i class="fas fa-calendar-check"></i></div>
+            <div class="kpi-value" id="todayCheckins">0</div>
+            <div class="kpi-label">Заездов сегодня</div>
+            <div class="kpi-trend"><span id="todayCheckouts">0</span> выездов</div>
+        </div>
+        <div class="kpi-card tooltip-hint" data-kpi-link="/admin/finance" data-tooltip="Финансы">
+            <div class="kpi-icon" style="background: #8b5cf6;"><i class="fas fa-ruble-sign"></i></div>
+            <div class="kpi-value" id="monthRevenue">0 ₽</div>
+            <div class="kpi-label">Выручка за месяц</div>
+            <div class="kpi-trend up">↑ 12%</div>
+        </div>
+        <div class="kpi-card tooltip-hint" data-kpi-link="/admin/inventory" data-tooltip="Склад" id="inventoryKPI">
+            <div class="kpi-icon" style="background: #ec4899;"><i class="fas fa-boxes"></i></div>
+            <div class="kpi-value" id="inventoryValue">0 ₽</div>
+            <div class="kpi-label">Стоимость склада</div>
+            <div class="kpi-trend warning"><span id="lowStockCount">0</span> мало</div>
+        </div>
+        <div class="kpi-card tooltip-hint" data-kpi-link="/admin/finance" data-tooltip="Баланс" id="financeKPI">
+            <div class="kpi-icon" style="background: #14b8a6;"><i class="fas fa-wallet"></i></div>
+            <div class="kpi-value" id="monthBalance">0 ₽</div>
+            <div class="kpi-label">Баланс</div>
+            <div class="kpi-trend">доходы - расходы</div>
+        </div>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="dashboard-layout">
+        <!-- Левая колонка -->
+        <div class="dashboard-main">
+            <!-- График выручки -->
+            <div class="chart-card" id="revenueChartCard">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-line" style="color: #6366f1;"></i> Выручка за 7 дней</h3>
+                    <span class="tooltip-hint" data-tooltip="Динамика выручки за последнюю неделю">ℹ️</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Популярные номера -->
+            <div class="popular-rooms" id="popularRoomsCard">
+                <div class="chart-header">
+                    <h3><i class="fas fa-star" style="color: #fbbf24;"></i> Популярные номера</h3>
+                    <span class="tooltip-hint" data-tooltip="Самые востребованные номера">ℹ️</span>
+                </div>
+                <div id="popularRoomsList">
+                    <div class="empty-state">Загрузка...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правая колонка - Активность -->
+        <div class="dashboard-sidebar">
+            <!-- Последние бронирования -->
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h3><i class="fas fa-calendar"></i> Последние бронирования</h3>
+                    <a href="/admin/bookings" class="btn-icon"><i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="activity-list" id="recentBookingsList">
+                    <div class="empty-state">Загрузка...</div>
+                </div>
+            </div>
+
+            <!-- Последние транзакции -->
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h3><i class="fas fa-receipt"></i> Финансы</h3>
+                    <a href="/admin/finance" class="btn-icon"><i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="activity-list" id="recentTransactionsList">
+                    <div class="empty-state">Загрузка...</div>
+                </div>
+            </div>
+
+            <!-- Последние движения склада -->
+            <div class="activity-card">
+                <div class="activity-header">
+                    <h3><i class="fas fa-box"></i> Склад</h3>
+                    <a href="/admin/inventory" class="btn-icon"><i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="activity-list" id="recentMovementsList">
+                    <div class="empty-state">Загрузка...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Настройки дашборда -->
+    <div class="dashboard-settings">
+        <div class="settings-panel" id="settingsPanel">
+            <div class="settings-title">
+                <i class="fas fa-sliders-h"></i> Настройки дашборда
+            </div>
+            <div class="settings-option">
+                <span>График выручки</span>
+                <label class="switch">
+                    <input type="checkbox" id="showRevenueChart" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="settings-option">
+                <span>Популярные номера</span>
+                <label class="switch">
+                    <input type="checkbox" id="showPopularRooms" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="settings-option">
+                <span>Показатели склада</span>
+                <label class="switch">
+                    <input type="checkbox" id="showInventory" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="settings-option">
+                <span>Показатели финансов</span>
+                <label class="switch">
+                    <input type="checkbox" id="showFinance" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="settings-option">
+                <span>Автообновление (сек)</span>
+                <select id="refreshInterval" style="padding: 4px 8px; border-radius: 6px;">
+                    <option value="15">15</option>
+                    <option value="30" selected>30</option>
+                    <option value="60">60</option>
+                    <option value="0">Откл.</option>
+                </select>
+            </div>
+        </div>
+        <button class="settings-btn" id="settingsToggle">
+            <i class="fas fa-cog"></i>
+        </button>
+    </div>
+</div>
+
+<script src="/static/js/admin/dashboard.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        DashboardManager.init();
+
+        // Устанавливаем имя пользователя
+        const user = Utils.getCurrentUser();
+        if (user) {
+            document.getElementById('userName').textContent = user.full_name || user.username;
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,231 @@
+{% extends "admin/base.html" %}
+{% set active_page = 'bookings' %}
+
+{% block title %}Бронирования - Бронь Кинг{% endblock %}
+{% block page_title %}Бронирования{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/admin/bookings.css">
+{% endblock %}
+
+{% block content %}
+<div class="bookings-page">
+    <!-- Статистика -->
+    <div class="bookings-stats">
+        <div class="stat-card active" data-filter="all">
+            <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="totalBookings">0</div>
+                <div class="stat-label">Всего</div>
+            </div>
+        </div>
+        <div class="stat-card" data-filter="pending">
+            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="pendingBookings">0</div>
+                <div class="stat-label">Ожидают</div>
+            </div>
+        </div>
+        <div class="stat-card" data-filter="confirmed">
+            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="confirmedBookings">0</div>
+                <div class="stat-label">Подтверждены</div>
+            </div>
+        </div>
+        <div class="stat-card" data-filter="checked_in">
+            <div class="stat-icon"><i class="fas fa-sign-in-alt"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="checkedInBookings">0</div>
+                <div class="stat-label">Заселены</div>
+            </div>
+        </div>
+        <div class="stat-card" data-filter="checked_out">
+            <div class="stat-icon"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="checkedOutBookings">0</div>
+                <div class="stat-label">Выехали</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Шахматка - проверь что структура такая -->
+    <div class="chessboard-section">
+        <div class="chessboard-card">
+            <div class="chessboard-header-bar">
+                <div class="chessboard-header-left">
+                    <h3><i class="fas fa-th"></i> Шахматка занятости</h3>
+                    <div class="chessboard-date-controls">
+                        <div class="date-range-selector">
+                            <input type="date" id="chessCheckIn">
+                            <span><i class="fas fa-arrow-right"></i></span>
+                            <input type="date" id="chessCheckOut">
+                        </div>
+                        <div class="quick-date-buttons">
+                            <button class="quick-date-btn" data-days="3">3 дня</button>
+                            <button class="quick-date-btn active" data-days="7">7 дней</button>
+                            <button class="quick-date-btn" data-days="14">14 дней</button>
+                            <button class="quick-date-btn" data-days="30">30 дней</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="chessboard-header-right">
+                    <button class="btn-icon" id="refreshChessboardBtn"><i class="fas fa-sync-alt"></i></button>
+                    <i class="fas fa-chevron-down chessboard-collapse-icon"></i>
+                </div>
+            </div>
+            <div class="chessboard-body" id="chessboardBody">
+                <div id="chessboardContainer" class="chessboard-scroll-container">
+                    <div class="empty-state">
+                        <div class="spinner"></div>
+                        <p>Загрузка шахматки...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Две колонки -->
+    <div class="bookings-layout">
+        <!-- Левая колонка - Форма -->
+        <div class="bookings-form-card">
+            <div class="form-header">
+                <h3><i class="fas fa-plus-circle"></i> Новое бронирование</h3>
+            </div>
+            <div class="form-body">
+                <form onsubmit="return false;">
+                    <div class="form-group">
+                        <label class="form-label">Гость</label>
+                        <select class="form-control" id="guestSelect" onchange="BookingManager.toggleNewGuest()">
+                            <option value="">Выберите гостя...</option>
+                            <option value="new">+ Создать нового</option>
+                        </select>
+                    </div>
+
+                    <div id="newGuestFields" style="display: none;">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="newLastName" placeholder="Фамилия">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="newFirstName" placeholder="Имя">
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" class="form-control" id="newPhone" placeholder="Телефон">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Даты проживания</label>
+                        <div class="date-range">
+                            <input type="date" class="form-control" id="checkIn">
+                            <i class="fas fa-arrow-right"></i>
+                            <input type="date" class="form-control" id="checkOut">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Номер</label>
+                        <select class="form-control" id="roomSelect">
+                            <option value="">Выберите даты</option>
+                        </select>
+                    </div>
+
+                    <div id="roomInfo" style="display: none;"></div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Взрослых</label>
+                            <input type="number" class="form-control" id="adults" value="2" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Детей</label>
+                            <input type="number" class="form-control" id="children" value="0" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Доп. услуги</label>
+                        <div class="services-grid" id="servicesList"></div>
+                    </div>
+
+                    <div class="price-calculator" id="priceBox" style="display: none;">
+                        <div class="price-row"><span>Ночей:</span> <span id="nightsCount">0</span></div>
+                        <div class="price-row"><span>Цена за ночь:</span> <span id="pricePerNight">0 ₽</span></div>
+                        <div class="price-row total"><span>Итого:</span> <span id="totalAmount">0 ₽</span></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Предоплата</label>
+                        <input type="number" class="form-control" id="prepayment" placeholder="Сумма">
+                    </div>
+
+                    <button type="button" class="btn btn-primary" style="width: 100%;" onclick="BookingManager.create()">
+                        <i class="fas fa-check"></i> Создать бронирование
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Правая колонка - Список -->
+        <div class="bookings-list-card">
+            <div class="list-header">
+                <h3><i class="fas fa-list"></i> Список бронирований</h3>
+                <div class="list-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="form-control" id="bookingSearch" placeholder="Поиск...">
+                    </div>
+                    <select class="sort-select" id="bookingSort">
+                        <option value="created_desc">Новые сначала</option>
+                        <option value="created_asc">Старые сначала</option>
+                        <option value="checkin_asc">Заезд (ближайшие)</option>
+                        <option value="checkin_desc">Заезд (поздние)</option>
+                        <option value="price_desc">Сумма (по убыванию)</option>
+                        <option value="price_asc">Сумма (по возрастанию)</option>
+                    </select>
+                    <button class="btn-icon" onclick="BookingManager.load()" title="Обновить">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">Все</button>
+                <button class="filter-tab" data-filter="pending">Ожидают</button>
+                <button class="filter-tab" data-filter="confirmed">Подтверждены</button>
+                <button class="filter-tab" data-filter="checked_in">Заселены</button>
+                <button class="filter-tab" data-filter="checked_out">Выехали</button>
+            </div>
+
+            <div class="bookings-list" id="bookingsList">
+                <div class="empty-state">
+                    <div class="spinner"></div>
+                    <p>Загрузка бронирований...</p>
+                </div>
+            </div>
+        </div>
+        <div id="bookingDetailPanel" class="booking-detail-wrapper" style="display: none;"></div>
+    </div>
+
+    <!-- Панель деталей бронирования -->
+    <div id="bookingDetailPanel" style="margin-top: 24px;"></div>
+</div>
+
+<script src="/static/js/admin/bookings.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        BookingManager.init();
+
+        // Установка дат по умолчанию для шахматки
+        const today = new Date();
+        const nextWeek = new Date(today);
+        nextWeek.setDate(today.getDate() + 7);
+
+        document.getElementById('chessCheckIn').value = BookingManager.formatDateForInput(today);
+        document.getElementById('chessCheckOut').value = BookingManager.formatDateForInput(nextWeek);
+
+        // Загружаем шахматку
+        setTimeout(() => BookingManager.renderChessboard(), 500);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+<div class="finance-panel-header">
+    <h3><i class="fas fa-users"></i> Сотрудники</h3>
+    <button class="btn btn-primary btn-sm" onclick="FinanceManager.openEmployeeModal()">
+        <i class="fas fa-plus"></i> Добавить
+    </button>
+</div>
+
+<div class="employees-grid" id="employeesGrid">
+    <div class="empty-state">Загрузка сотрудников...</div>
+</div>
+
+<!-- Модалка сотрудника -->
+<div class="modal" id="employeeModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Новый сотрудник</h3>
+            <button class="modal-close" onclick="UI.closeModal('employeeModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="employeeForm">
+                <div class="form-group">
+                    <label class="form-label">ФИО</label>
+                    <input type="text" class="form-control" id="empFullName" placeholder="Иванов Иван">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Должность</label>
+                    <select class="form-control" id="empPosition">
+                        <option value="maid">Горничная</option>
+                        <option value="receptionist">Администратор</option>
+                        <option value="manager">Управляющий</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Оклад (₽/мес)</label>
+                        <input type="number" class="form-control" id="empBaseSalary" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ставка (₽/час)</label>
+                        <input type="number" class="form-control" id="empHourlyRate" value="0">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="UI.closeModal('employeeModal')">Отмена</button>
+            <button class="btn btn-primary" onclick="FinanceManager.saveEmployee()">Сохранить</button>
+        </div>
+    </div>
+</div>

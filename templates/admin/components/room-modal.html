@@ -1,0 +1,63 @@
+<div class="modal" id="roomModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="roomModalTitle">Добавить номер</h3>
+            <button class="modal-close" onclick="UI.closeModal('roomModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="roomForm">
+                <input type="hidden" name="id" id="roomId">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Номер комнаты <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="room_number" id="roomNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Этаж <span class="required">*</span></label>
+                        <input type="number" class="form-control" name="floor" id="roomFloor" required min="1">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Тип номера <span class="required">*</span></label>
+                        <select class="form-control" name="room_type" id="roomType" required>
+                            <option value="standard">Стандарт</option>
+                            <option value="superior">Улучшенный</option>
+                            <option value="deluxe">Делюкс</option>
+                            <option value="suite">Люкс</option>
+                            <option value="family">Семейный</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Вместимость</label>
+                        <input type="number" class="form-control" name="capacity" id="roomCapacity" value="2" min="1">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Цена за ночь (₽) <span class="required">*</span></label>
+                        <input type="number" class="form-control" name="price_per_night" id="roomPrice" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Статус</label>
+                        <select class="form-control" name="status" id="roomStatus">
+                            <option value="available">Свободен</option>
+                            <option value="occupied">Занят</option>
+                            <option value="cleaning">Уборка</option>
+                            <option value="maintenance">Ремонт</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="UI.closeModal('roomModal')">Отмена</button>
+            <button class="btn btn-primary" onclick="RoomsManager.save()">
+                <i class="fas fa-save"></i> Сохранить
+            </button>
+        </div>
+    </div>
+</div>

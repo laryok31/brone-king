@@ -1,0 +1,78 @@
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background: var(--gray-50);
+}
+
+.admin-main {
+    flex: 1;
+    margin-left: 280px;
+    min-height: 100vh;
+    background: var(--gray-50);
+    transition: margin-left var(--transition);
+    width: calc(100% - 280px);
+}
+
+.admin-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 16px 28px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.content-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.admin-content {
+    padding: 24px 28px;
+    animation: fadeInUp var(--transition) ease;
+    min-height: calc(100vh - 73px);
+    width: 100%;
+}
+
+.card {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 1024px) {
+    .admin-main {
+        margin-left: 90px;
+        width: calc(100% - 90px);
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .admin-content {
+        padding: 20px 16px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .admin-main { margin-left: 90px; }
+}
+
+@media (max-width: 768px) {
+    .admin-main { margin-left: 0; }
+    .admin-header { padding: 12px 20px; }
+    .admin-content { padding: 20px 16px; }
+}

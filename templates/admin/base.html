@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Бронь Кинг{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <div class="sidebar-header">
+            <a href="/admin" class="sidebar-logo">
+                <i class="fas fa-hotel"></i>
+                <span>Бронь Кинг</span>
+            </a>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/admin" class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+                <i class="fas fa-chart-pie"></i><span>Дашборд</span>
+            </a>
+            <a href="/admin/rooms" class="nav-item {% if active_page == 'rooms' %}active{% endif %}">
+                <i class="fas fa-door-open"></i><span>Номера</span>
+            </a>
+            <a href="/admin/bookings" class="nav-item {% if active_page == 'bookings' %}active{% endif %}">
+                <i class="fas fa-calendar-check"></i><span>Бронирования</span>
+            </a>
+            <a href="/admin/guests" class="nav-item {% if active_page == 'guests' %}active{% endif %}">
+                <i class="fas fa-users"></i><span>Гости</span>
+            </a>
+            <a href="/admin/services" class="nav-item {% if active_page == 'services' %}active{% endif %}">
+                <i class="fas fa-concierge-bell"></i><span>Услуги</span>
+            </a>
+            <a href="/admin/inventory" class="nav-item {% if active_page == 'inventory' %}active{% endif %}">
+                <i class="fas fa-warehouse"></i>
+                <span>Склад</span>
+            </a>
+            <a href="/admin/finance" class="nav-item {% if active_page == 'finance' %}active{% endif %}">
+                <i class="fas fa-chart-line"></i>
+                <span>Финансы</span>
+            </a>
+            <a href="/admin/reports" class="nav-item {% if active_page == 'reports' %}active{% endif %}">
+                <i class="fas fa-chart-bar"></i><span>Отчеты</span>
+            </a>
+            <a href="/admin/settings" class="nav-item {% if active_page == 'settings' %}active{% endif %}">
+                <i class="fas fa-cog"></i><span>Настройки</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="btn btn-danger w-full" onclick="Utils.logout()">
+                <i class="fas fa-sign-out-alt"></i><span>Выйти</span>
+            </button>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-header">
+            <h1>{% block page_title %}Панель управления{% endblock %}</h1>
+            <div class="header-actions">
+                <button class="btn-icon" onclick="window.location.href='/admin/settings'">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="user-menu">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Администратор</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</div>
+
+<div class="loading-overlay">
+    <div class="loading-spinner"></div>
+</div>
+
+<script src="/static/js/main.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = Utils.getCurrentUser();
+        if (!user || !localStorage.getItem('token')) {
+            window.location.href = '/login';
+            return;
+        }
+        document.getElementById('userName').textContent = user.full_name || user.username;
+    });
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,418 @@
+.settings-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Приветствие */
+.settings-welcome {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 0;
+    margin-bottom: 8px;
+}
+
+.welcome-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+}
+
+.welcome-text h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.welcome-text p {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Вкладки */
+.settings-tabs-wrapper {
+    margin-bottom: 24px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.settings-tabs {
+    display: flex;
+    gap: 4px;
+}
+
+.settings-tabs .tab {
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 10px 10px 0 0;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.settings-tabs .tab:hover {
+    color: #6366f1;
+    background: #f3f4f6;
+}
+
+.settings-tabs .tab.active {
+    color: #6366f1;
+    background: white;
+}
+
+.settings-tabs .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #6366f1;
+}
+
+/* Панели */
+.settings-panels .panel {
+    display: none;
+}
+
+.settings-panels .panel.active {
+    display: block;
+    animation: fadeIn 0.25s ease;
+}
+
+/* Сетка */
+.settings-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Карточки */
+.settings-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #eef0f2;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.settings-card.full-width {
+    grid-column: span 2;
+}
+
+.card-header {
+    padding: 20px 24px;
+    background: #fafbfc;
+    border-bottom: 1px solid #eef0f2;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6366f1;
+    font-size: 18px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.card-title h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 2px;
+}
+
+.card-title p {
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+.card-body {
+    padding: 20px 24px;
+}
+
+/* Элементы настроек */
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+.setting-info {
+    flex: 1;
+}
+
+.setting-label {
+    font-weight: 500;
+    color: #1f2937;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.setting-hint {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.setting-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Темы */
+.theme-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.theme-card {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.theme-card:hover {
+    transform: translateY(-2px);
+}
+
+.theme-preview {
+    height: 80px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    border: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.theme-card.active .theme-preview {
+    border-color: #6366f1;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.theme-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.theme-name {
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.theme-badge {
+    font-size: 10px;
+    background: #e5e7eb;
+    padding: 2px 6px;
+    border-radius: 10px;
+    color: #6b7280;
+}
+
+/* Типы номеров */
+.room-types-list {
+    margin-bottom: 8px;
+}
+
+.room-type-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.room-type-info {
+    flex: 1;
+}
+
+.room-type-name {
+    font-weight: 500;
+    display: block;
+}
+
+.room-type-count {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.room-type-price {
+    font-weight: 600;
+    color: #6366f1;
+    margin-right: 12px;
+}
+
+/* Удобства */
+.amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.amenity-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: #f9fafb;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+/* Скидки */
+.discount-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.discount-item:last-child {
+    border-bottom: none;
+}
+
+.discount-name {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.discount-desc {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.discount-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Инсайт */
+.insight-card {
+    background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 16px;
+    border-left: 4px solid #6366f1;
+}
+
+.insight-icon {
+    width: 36px;
+    height: 36px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6366f1;
+}
+
+.insight-content strong {
+    color: #1f2937;
+}
+
+.insight-content p {
+    color: #4b5563;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+/* Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #d1d5db;
+    transition: .2s;
+    border-radius: 24px;
+}
+
+.switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .2s;
+    border-radius: 50%;
+}
+
+.switch input:checked + .slider {
+    background: #6366f1;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .settings-grid-2col {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-card.full-width {
+        grid-column: span 1;
+    }
+
+    .settings-tabs {
+        flex-wrap: wrap;
+    }
+
+    .theme-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}

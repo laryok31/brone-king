@@ -1,0 +1,195 @@
+{% extends "admin/base.html" %}
+{% set active_page = 'inventory' %}
+
+{% block title %}Склад - Бронь Кинг{% endblock %}
+{% block page_title %}Складской учёт{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/admin/inventory.css">
+{% endblock %}
+
+{% block content %}
+<div class="inventory-page">
+    <!-- Статистика -->
+    <div class="inventory-stats">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #6366f1;"><i class="fas fa-boxes"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="totalItems">0</div>
+                <div class="stat-label">Всего товаров</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #10b981;"><i class="fas fa-ruble-sign"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="totalValue">0 ₽</div>
+                <div class="stat-label">Стоимость склада</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #f59e0b;"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="lowStockCount">0</div>
+                <div class="stat-label">Мало на складе</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #ef4444;"><i class="fas fa-arrow-down"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="totalPurchases">0 ₽</div>
+                <div class="stat-label">Закупки</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #8b5cf6;"><i class="fas fa-arrow-up"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="totalSales">0 ₽</div>
+                <div class="stat-label">Продажи</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Заголовок -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" class="form-control" id="inventorySearch" placeholder="Поиск товара...">
+            </div>
+            <label class="filter-switch">
+                <input type="checkbox" id="showLowStock">
+                <span>Только с низким остатком</span>
+            </label>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn btn-outline" onclick="InventoryManager.openCategoryPanel()">
+                <i class="fas fa-folder-plus"></i> Категория
+            </button>
+            <button class="btn btn-primary" onclick="InventoryManager.openPanel()">
+                <i class="fas fa-plus"></i> Добавить товар
+            </button>
+        </div>
+    </div>
+
+    <!-- Категории -->
+    <div class="categories-tabs" id="categoriesTabs"></div>
+
+    <!-- Сетка товаров -->
+    <div class="inventory-grid" id="inventoryGrid">
+        <div class="empty-state"><div class="spinner"></div><p>Загрузка товаров...</p></div>
+    </div>
+
+    <!-- Таблица движений -->
+    <div class="movements-table">
+        <div class="movements-header">
+            <h3><i class="fas fa-history"></i> Последние движения</h3>
+            <button class="btn-icon" onclick="InventoryManager.loadMovements()">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Товар</th>
+                    <th>Тип</th>
+                    <th>Количество</th>
+                    <th>Сумма</th>
+                    <th>Примечание</th>
+                </tr>
+                </thead>
+                <tbody id="movementsTable"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Слайд-панель товара -->
+<div class="slide-overlay" id="slideOverlay" onclick="InventoryManager.closePanel()"></div>
+<div class="slide-panel" id="slidePanel">
+    <div class="slide-header">
+        <h3 id="panelTitle"><i class="fas fa-plus-circle"></i> Новый товар</h3>
+        <button class="btn-icon" onclick="InventoryManager.closePanel()">&times;</button>
+    </div>
+    <div class="slide-body">
+        <form id="itemForm" onsubmit="return false;">
+            <input type="hidden" id="itemId">
+
+            <div class="form-group">
+                <label class="form-label">Категория *</label>
+                <select class="form-control" id="itemCategory" required></select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Название *</label>
+                <input type="text" class="form-control" id="itemName" placeholder="Например: Шампунь" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Ед. измерения</label>
+                    <input type="text" class="form-control" id="itemUnit" value="шт">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Мин. запас</label>
+                    <input type="number" class="form-control" id="itemMinStock" value="10" min="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Макс. запас</label>
+                    <input type="number" class="form-control" id="itemMaxStock" value="100" min="0">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Цена закупки (₽)</label>
+                    <input type="number" class="form-control" id="itemPurchasePrice" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Цена продажи (₽)</label>
+                    <input type="number" class="form-control" id="itemSellingPrice" value="0" min="0">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Поставщик</label>
+                <input type="text" class="form-control" id="itemSupplier" placeholder="Название поставщика">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Место хранения</label>
+                <input type="text" class="form-control" id="itemLocation" placeholder="Склад А, Стеллаж 1">
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button type="button" class="btn btn-outline" style="flex: 1;" onclick="InventoryManager.closePanel()">Отмена</button>
+                <button type="button" class="btn btn-primary" style="flex: 1;" onclick="InventoryManager.saveItem()">Сохранить</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Модалка категории -->
+<div class="modal" id="categoryModal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Новая категория</h3>
+            <button class="modal-close" onclick="document.getElementById('categoryModal').style.display='none'">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Название категории</label>
+                <input type="text" class="form-control" id="categoryName" placeholder="Например: Бытовая химия">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="document.getElementById('categoryModal').style.display='none'">Отмена</button>
+            <button class="btn btn-primary" onclick="InventoryManager.saveCategory()">Создать</button>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/admin/inventory.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => InventoryManager.init());</script>
+{% endblock %}

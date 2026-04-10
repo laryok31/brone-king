@@ -1,0 +1,590 @@
+/* Гости - в стиле бронирований */
+.guests-page {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Статистика */
+.guests-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #6366f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1.2;
+}
+
+.stat-label {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Две колонки */
+.guests-layout {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 24px;
+}
+
+/* Левая колонка - список */
+.guests-list-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 200px);
+}
+
+.list-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.list-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.list-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+
+.search-box input {
+    padding: 8px 12px 8px 36px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 200px;
+}
+
+/* Фильтры */
+.filter-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 12px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background: white;
+}
+
+.filter-tab {
+    padding: 6px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-tab:hover {
+    background: #f3f4f6;
+}
+
+.filter-tab.active {
+    background: #6366f1;
+    color: white;
+}
+
+/* Сортировка */
+.sort-select {
+    padding: 8px 12px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 13px;
+    background: white;
+    margin: 0 24px 12px;
+    width: calc(100% - 48px);
+}
+
+/* Список гостей */
+.guests-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.guest-item {
+    padding: 16px 24px;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.guest-item:hover {
+    background: #f9fafb;
+}
+
+.guest-item.active {
+    background: #eff6ff;
+    border-left: 3px solid #6366f1;
+}
+
+.guest-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #6366f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.guest-avatar.vip {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+.guest-avatar.blacklisted {
+    background: linear-gradient(135deg, #ef4444, #f87171);
+}
+
+.guest-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.guest-name {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.guest-phone {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.guest-badges {
+    display: flex;
+    gap: 4px;
+}
+
+/* Правая колонка - детали */
+.guests-detail-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detail-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+}
+
+.detail-body {
+    padding: 24px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.guest-profile {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.guest-profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    background: #6366f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 36px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.guest-profile-avatar.vip {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+.guest-profile-info {
+    flex: 1;
+}
+
+.guest-profile-info h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.guest-contact {
+    display: flex;
+    gap: 20px;
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+
+/* Вкладки в деталях */
+.detail-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 20px;
+}
+
+.detail-tab {
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    position: relative;
+}
+
+.detail-tab:hover {
+    color: #6366f1;
+}
+
+.detail-tab.active {
+    color: #6366f1;
+}
+
+.detail-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #6366f1;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Инфо-карточки */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.info-card {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.info-card h4 {
+    margin-bottom: 12px;
+    color: #1f2937;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 14px;
+}
+
+.info-row span:first-child {
+    color: #6b7280;
+}
+
+.info-row span:last-child {
+    font-weight: 500;
+    color: #1f2937;
+}
+
+/* История бронирований */
+.booking-history-item {
+    padding: 16px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.booking-history-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.booking-history-dates {
+    color: #6b7280;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.booking-history-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+/* Быстрые действия */
+.quick-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* Слайд-панель */
+.slide-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+}
+
+.slide-panel.active {
+    transform: translateX(0);
+}
+
+.slide-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 9998;
+    display: none;
+}
+
+.slide-overlay.active {
+    display: block;
+}
+
+.slide-header {
+    padding: 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.slide-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.slide-body {
+    padding: 24px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Форма */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #374151;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* Пустое состояние */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9ca3af;
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+/* Загрузка */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #6366f1;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .guests-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .guests-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .list-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-box input {
+        width: 100%;
+    }
+
+    .guest-profile {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .guest-contact {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .slide-panel {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .guests-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,69 @@
+<div class="settings-panel" id="amenitiesPanel">
+    <div class="settings-section">
+        <h3 class="settings-section-title"><i class="fas fa-hotel"></i> Удобства в отеле</h3>
+        <div class="amenities-grid">
+            <label class="amenity-checkbox"><input type="checkbox" checked> Бесплатный Wi-Fi</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Парковка</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Спа-центр</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Фитнес-центр</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Ресторан</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Бар</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Бассейн</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Конференц-зал</label>
+            <label class="amenity-checkbox"><input type="checkbox"> Трансфер</label>
+            <label class="amenity-checkbox"><input type="checkbox"> Прачечная</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Круглосуточная стойка</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Обслуживание номеров</label>
+            <label class="amenity-checkbox"><input type="checkbox"> Детская комната</label>
+            <label class="amenity-checkbox"><input type="checkbox"> Бизнес-центр</label>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <h3 class="settings-section-title"><i class="fas fa-bed"></i> Удобства в номерах</h3>
+        <div class="amenities-grid">
+            <label class="amenity-checkbox"><input type="checkbox" checked> Телевизор</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Мини-бар</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Чай/кофе</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Халат и тапочки</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Фен</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Косметика</label>
+            <label class="amenity-checkbox"><input type="checkbox"> Джакузи</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Рабочий стол</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Утюг</label>
+            <label class="amenity-checkbox"><input type="checkbox"> Балкон</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Вид на город</label>
+            <label class="amenity-checkbox"><input type="checkbox"> Звукоизоляция</label>
+            <label class="amenity-checkbox"><input type="checkbox" checked> Сейф</label>
+            <label class="amenity-checkbox"><input type="checkbox"> Умный дом</label>
+        </div>
+    </div>
+</div>
+
+<style>
+    .amenities-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 8px;
+    }
+    .amenity-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        background: var(--gray-50);
+        border-radius: var(--radius);
+        border: 1px solid var(--gray-200);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    .amenity-checkbox:hover {
+        border-color: var(--primary);
+        background: white;
+    }
+    .amenity-checkbox input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--primary);
+    }
+</style>

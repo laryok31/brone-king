@@ -1,0 +1,52 @@
+<aside class="admin-sidebar">
+    <div class="sidebar-header">
+        <a href="/admin" class="sidebar-logo">
+            <div class="sidebar-logo-icon"><i class="fas fa-crown"></i></div>
+            <span class="sidebar-logo-text">Royal Hotel</span>
+        </a>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section">
+            <div class="nav-section-title">Основное</div>
+            <a href="/admin" class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+                <i class="fas fa-chart-pie"></i><span>Дашборд</span>
+            </a>
+            <a href="/admin/rooms" class="nav-item {% if active_page == 'rooms' %}active{% endif %}">
+                <i class="fas fa-door-open"></i><span>Номера</span>
+            </a>
+            <a href="/admin/bookings" class="nav-item {% if active_page == 'bookings' %}active{% endif %}">
+                <i class="fas fa-calendar-check"></i><span>Бронирования</span>
+            </a>
+            <a href="/admin/guests" class="nav-item {% if active_page == 'guests' %}active{% endif %}">
+                <i class="fas fa-users"></i><span>Гости</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Управление</div>
+            <a href="/admin/services" class="nav-item">
+                <i class="fas fa-concierge-bell"></i><span>Услуги</span>
+            </a>
+            <a href="/admin/reports" class="nav-item">
+                <i class="fas fa-file-alt"></i><span>Отчеты</span>
+            </a>
+            <a href="/admin/settings" class="nav-item {% if active_page == 'settings' %}active{% endif %}">
+                <i class="fas fa-cog"></i><span>Настройки</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="user-info">
+            <div class="user-avatar" id="adminUserAvatar">A</div>
+            <div class="user-details">
+                <div class="user-name" id="adminUserName">Администратор</div>
+                <div class="user-role">Администратор</div>
+            </div>
+        </div>
+        <button class="btn btn-danger" style="width: 100%;" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Выйти
+        </button>
+    </div>
+</aside>

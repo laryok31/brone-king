@@ -1,0 +1,138 @@
+/* Исправление конфликтов макета */
+.admin-content {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Двухколоночный макет - ВАЖНО! */
+.two-column-layout {
+    display: grid !important;
+    grid-template-columns: 380px 1fr !important;
+    gap: 24px !important;
+    width: 100% !important;
+}
+
+.left-column {
+    position: sticky;
+    top: 90px;
+    height: fit-content;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.right-column {
+    min-width: 0;
+    width: 100%;
+}
+
+/* Карточки */
+.modern-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.modern-card-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modern-card-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modern-card-body {
+    padding: 24px;
+}
+
+/* Статистика */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-box {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.stat-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    border-color: #6366f1;
+}
+
+.stat-box.active {
+    border-color: #6366f1;
+    background: linear-gradient(135deg, white, rgba(99, 102, 241, 0.05));
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #6366f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1.2;
+}
+
+.stat-label {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .two-column-layout {
+        grid-template-columns: 1fr !important;
+    }
+
+    .left-column {
+        position: static !important;
+        max-height: none !important;
+    }
+
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .stats-row {
+        grid-template-columns: 1fr;
+    }
+}

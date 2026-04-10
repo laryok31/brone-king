@@ -1,0 +1,708 @@
+.finance-page {
+    width: 100%;
+}
+
+/* Статистика */
+.finance-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.finance-stat-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+}
+
+.stat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+}
+
+.stat-value-large {
+    font-size: 36px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.stat-label {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.stat-detail {
+    font-size: 13px;
+    color: #9ca3af;
+    margin-top: 8px;
+}
+
+/* Период */
+.period-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.period-btn {
+    padding: 8px 16px;
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.period-btn:hover {
+    border-color: #6366f1;
+    color: #6366f1;
+}
+
+.period-btn.active {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+}
+
+.custom-period {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    background: white;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.custom-period input {
+    border: none;
+    padding: 6px;
+    font-size: 14px;
+    width: 130px;
+}
+
+/* Две колонки */
+.finance-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+}
+
+/* Левая колонка - транзакции */
+.transactions-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 12px 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.filter-tab {
+    padding: 6px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-tab:hover {
+    background: #f3f4f6;
+}
+
+.filter-tab.active {
+    background: #6366f1;
+    color: white;
+}
+
+.transactions-list {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.transaction-item {
+    padding: 16px 24px;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.transaction-item:hover {
+    background: #f9fafb;
+}
+
+.transaction-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.transaction-info {
+    flex: 1;
+}
+
+.transaction-desc {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.transaction-meta {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.transaction-amount {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.transaction-amount.income {
+    color: #10b981;
+}
+
+.transaction-amount.expense {
+    color: #ef4444;
+}
+
+/* Правая колонка - быстрые действия */
+.actions-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    height: fit-content;
+    position: sticky;
+    top: 90px;
+}
+
+.actions-body {
+    padding: 24px;
+}
+
+.quick-action-btn {
+    width: 100%;
+    padding: 14px;
+    background: #f9fafb;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2937;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.quick-action-btn:hover {
+    border-color: #6366f1;
+    background: #eff6ff;
+}
+
+.quick-action-btn i {
+    width: 24px;
+    color: #6366f1;
+}
+
+/* Категории */
+.categories-list {
+    margin-top: 20px;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.category-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.category-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+}
+
+/* Зарплаты */
+.salaries-table {
+    margin-top: 24px;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Слайд-панель */
+.slide-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+}
+
+.slide-panel.active {
+    transform: translateX(0);
+}
+
+.slide-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 9998;
+    display: none;
+}
+
+.slide-overlay.active {
+    display: block;
+}
+
+.slide-header {
+    padding: 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.slide-body {
+    padding: 24px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .finance-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .finance-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .actions-card {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .finance-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .period-selector {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .custom-period {
+        width: 100%;
+    }
+
+    .custom-period input {
+        flex: 1;
+        width: auto;
+    }
+
+    .slide-panel {
+        max-width: 100%;
+    }
+}
+
+/* Вкладки */
+.finance-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 24px 0;
+    background: white;
+    padding: 8px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.finance-tab {
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.finance-tab:hover { background: #f3f4f6; }
+.finance-tab.active { background: #6366f1; color: white; }
+
+.finance-panels .finance-panel {
+    display: none;
+}
+
+.finance-panels .finance-panel.active {
+    display: block;
+}
+
+.finance-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.finance-panel-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Сотрудники */
+.employees-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.employee-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    border: 1px solid #eef0f2;
+}
+
+.employee-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.employee-position {
+    color: #6366f1;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.employee-salary {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid #f3f4f6;
+    font-size: 14px;
+}
+
+/* Чек-листы */
+.checklists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.checklist-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+/* Зарплаты */
+.salary-report {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.period-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.panel-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.period-selector-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.employee-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    border: 1px solid #eef0f2;
+}
+
+.employees-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.transaction-item:hover {
+    background: #f9fafb;
+    transform: translateX(4px);
+}
+
+.transaction-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.transaction-info {
+    flex: 1;
+}
+
+.transaction-desc {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.transaction-meta {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.transaction-amount {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.transaction-amount.income { color: #10b981; }
+.transaction-amount.expense { color: #ef4444; }
+
+/* Подсказки */
+.suggestions-bar {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+}
+
+.suggestions-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.suggestions-header i {
+    color: #6366f1;
+}
+
+.suggestions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.suggestion-item {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.suggestion-item:hover {
+    background: rgba(255,255,255,0.15);
+    transform: translateX(4px);
+}
+
+.suggestion-item i {
+    font-size: 18px;
+}
+
+.suggestion-item.warning i { color: #f59e0b; }
+.suggestion-item.info i { color: #3b82f6; }
+.suggestion-item.success i { color: #10b981; }
+
+.suggestion-item .suggestion-action {
+    margin-left: auto;
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* Настройки финансов */
+.finance-settings-card {
+    background: white;
+    border-radius: 16px;
+    margin-top: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid #e5e7eb;
+}
+
+.settings-header {
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+}
+
+.settings-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.settings-body {
+    padding: 0 24px 24px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.settings-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding-top: 20px;
+}
+
+.setting-card {
+    background: #fafbfc;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.setting-card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #1f2937;
+}
+
+@media (max-width: 900px) {
+    .settings-grid-3 {
+        grid-template-columns: 1fr;
+    }
+}

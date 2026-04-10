@@ -1,0 +1,248 @@
+{% extends "admin/base.html" %}
+{% set active_page = 'reports' %}
+
+{% block title %}Отчеты - Бронь Кинг{% endblock %}
+{% block page_title %}Отчеты и аналитика{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/admin/reports.css">
+{% endblock %}
+
+{% block content %}
+<div class="reports-page">
+    <!-- Период и фильтры -->
+    <div class="reports-header">
+        <div class="period-selector">
+            <button class="period-btn active" data-period="today">Сегодня</button>
+            <button class="period-btn" data-period="week">Неделя</button>
+            <button class="period-btn" data-period="month">Месяц</button>
+            <button class="period-btn" data-period="quarter">Квартал</button>
+            <button class="period-btn" data-period="year">Год</button>
+
+            <div class="custom-period">
+                <input type="date" id="reportStartDate" class="form-control">
+                <span>—</span>
+                <input type="date" id="reportEndDate" class="form-control">
+                <button class="btn btn-primary btn-sm" onclick="ReportsManager.applyCustomPeriod()">Применить</button>
+            </div>
+        </div>
+
+        <div class="report-actions">
+            <button class="btn btn-outline" onclick="ReportsManager.exportPDF()">
+                <i class="fas fa-file-pdf"></i> PDF
+            </button>
+            <button class="btn btn-outline" onclick="ReportsManager.exportExcel()">
+                <i class="fas fa-file-excel"></i> Excel
+            </button>
+            <button class="btn btn-outline" onclick="ReportsManager.print()">
+                <i class="fas fa-print"></i> Печать
+            </button>
+        </div>
+    </div>
+
+    <!-- Ключевые показатели -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-icon"><i class="fas fa-ruble-sign"></i></div>
+            <div class="kpi-content">
+                <div class="kpi-value" id="totalRevenue">0 ₽</div>
+                <div class="kpi-label">Выручка</div>
+                <div class="kpi-change positive" id="revenueChange">+0%</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon"><i class="fas fa-calendar-check"></i></div>
+            <div class="kpi-content">
+                <div class="kpi-value" id="totalBookings">0</div>
+                <div class="kpi-label">Бронирований</div>
+                <div class="kpi-change" id="bookingsChange">0</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon"><i class="fas fa-users"></i></div>
+            <div class="kpi-content">
+                <div class="kpi-value" id="totalGuests">0</div>
+                <div class="kpi-label">Гостей</div>
+                <div class="kpi-change" id="guestsChange">0</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon"><i class="fas fa-percent"></i></div>
+            <div class="kpi-content">
+                <div class="kpi-value" id="occupancyRate">0%</div>
+                <div class="kpi-label">Загрузка</div>
+                <div class="kpi-change" id="occupancyChange">0%</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="kpi-content">
+                <div class="kpi-value" id="avgCheck">0 ₽</div>
+                <div class="kpi-label">Средний чек</div>
+                <div class="kpi-change" id="avgCheckChange">0%</div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-icon"><i class="fas fa-clock"></i></div>
+            <div class="kpi-content">
+                <div class="kpi-value" id="avgStay">0</div>
+                <div class="kpi-label">Среднее проживание</div>
+                <div class="kpi-change">дней</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- После kpi-grid добавить -->
+    <div class="assistant-card">
+        <div class="assistant-header">
+            <h3><i class="fas fa-robot"></i> Умный помощник</h3>
+            <span class="assistant-badge">AI</span>
+        </div>
+        <div class="assistant-body" id="assistantMessages">
+            <div class="assistant-message">
+                <i class="fas fa-spinner fa-spin"></i>
+                <div>
+                    <strong>Анализирую данные...</strong>
+                    <p>Подождите немного</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Графики -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3><i class="fas fa-chart-bar"></i> Динамика выручки</h3>
+                <select class="form-control chart-select" id="revenueChartType">
+                    <option value="bar">Столбцы</option>
+                    <option value="line">Линия</option>
+                </select>
+            </div>
+            <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3><i class="fas fa-chart-pie"></i> Источники бронирований</h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="sourcesChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3><i class="fas fa-door-open"></i> Популярность номеров</h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="roomsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-header">
+                <h3><i class="fas fa-calendar-alt"></i> Загрузка по дням</h3>
+            </div>
+            <div class="chart-container">
+                <canvas id="occupancyChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Детальные таблицы -->
+    <div class="reports-tabs">
+        <button class="report-tab active" data-tab="revenue">Доходы</button>
+        <button class="report-tab" data-tab="bookings">Бронирования</button>
+        <button class="report-tab" data-tab="rooms">Номера</button>
+        <button class="report-tab" data-tab="guests">Гости</button>
+    </div>
+
+    <div class="tab-content active" id="tabRevenue">
+        <div class="table-card">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Период</th>
+                    <th>Броней</th>
+                    <th>Ночей</th>
+                    <th>Выручка</th>
+                    <th>Средний чек</th>
+                    <th>Загрузка</th>
+                </tr>
+                </thead>
+                <tbody id="revenueTable">
+                <tr><td colspan="6" class="text-center">Загрузка...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tabBookings">
+        <div class="table-card">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>№ брони</th>
+                    <th>Гость</th>
+                    <th>Номер</th>
+                    <th>Даты</th>
+                    <th>Сумма</th>
+                    <th>Статус</th>
+                    <th>Источник</th>
+                </tr>
+                </thead>
+                <tbody id="bookingsTable">
+                <tr><td colspan="7" class="text-center">Загрузка...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tabRooms">
+        <div class="table-card">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Номер</th>
+                    <th>Тип</th>
+                    <th>Броней</th>
+                    <th>Ночей</th>
+                    <th>Выручка</th>
+                    <th>Загрузка</th>
+                </tr>
+                </thead>
+                <tbody id="roomsTable">
+                <tr><td colspan="6" class="text-center">Загрузка...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tabGuests">
+        <div class="table-card">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Гость</th>
+                    <th>Визитов</th>
+                    <th>Ночей</th>
+                    <th>Расходы</th>
+                    <th>Последний визит</th>
+                    <th>Статус</th>
+                </tr>
+                </thead>
+                <tbody id="guestsTable">
+                <tr><td colspan="6" class="text-center">Загрузка...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/static/js/admin/reports.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => ReportsManager.init());</script>
+{% endblock %}

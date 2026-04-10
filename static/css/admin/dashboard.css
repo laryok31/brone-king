@@ -1,0 +1,418 @@
+.dashboard-page {
+    width: 100%;
+}
+
+/* Приветствие */
+.welcome-section {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 24px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+}
+
+.welcome-text h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.welcome-text p {
+    opacity: 0.9;
+    font-size: 16px;
+}
+
+.quick-stats {
+    display: flex;
+    gap: 32px;
+}
+
+.quick-stat {
+    text-align: center;
+}
+
+.quick-stat-value {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.quick-stat-label {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* KPI сетка */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.kpi-card {
+    background: white;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-color: #6366f1;
+}
+
+.kpi-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.kpi-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 4px;
+}
+
+.kpi-label {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.kpi-trend {
+    font-size: 11px;
+    margin-top: 6px;
+}
+
+.kpi-trend.up { color: #10b981; }
+.kpi-trend.down { color: #ef4444; }
+.kpi-trend.warning { color: #f59e0b; }
+
+/* Две колонки */
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+/* Левая колонка */
+.dashboard-main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* График */
+.chart-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #e5e7eb;
+}
+
+.chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.chart-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.chart-container {
+    height: 250px;
+}
+
+/* Популярные номера */
+.popular-rooms {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #e5e7eb;
+}
+
+.popular-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.popular-item:last-child {
+    border-bottom: none;
+}
+
+.popular-rank {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.popular-rank.top1 { background: #fbbf24; color: white; }
+.popular-rank.top2 { background: #9ca3af; color: white; }
+.popular-rank.top3 { background: #cd7f32; color: white; }
+
+.popular-info {
+    flex: 1;
+}
+
+.popular-name {
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 2px;
+}
+
+.popular-stats {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.popular-value {
+    font-weight: 700;
+    color: #6366f1;
+}
+
+/* Правая колонка - активность */
+.dashboard-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.activity-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid #e5e7eb;
+}
+
+.activity-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.activity-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.activity-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    padding: 14px 20px;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.activity-item:hover {
+    background: #f9fafb;
+}
+
+.activity-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 500;
+    color: #1f2937;
+    margin-bottom: 2px;
+    font-size: 14px;
+}
+
+.activity-time {
+    font-size: 11px;
+    color: #9ca3af;
+}
+
+.activity-amount {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.activity-amount.income { color: #10b981; }
+.activity-amount.expense { color: #ef4444; }
+
+/* Настройки дашборда */
+.dashboard-settings {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+}
+
+.settings-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 30px;
+    background: #6366f1;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.settings-btn:hover {
+    transform: scale(1.05);
+    background: #4f46e5;
+}
+
+.settings-panel {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 320px;
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    display: none;
+}
+
+.settings-panel.active {
+    display: block;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.settings-title {
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #1f2937;
+}
+
+.settings-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.settings-option:last-child {
+    border-bottom: none;
+}
+
+/* Туториал */
+.tooltip-hint {
+    position: relative;
+    cursor: help;
+}
+
+.tooltip-hint:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 8px;
+}
+
+/* Адаптивность */
+@media (max-width: 1400px) {
+    .kpi-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .dashboard-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .kpi-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .welcome-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-stats {
+        flex-direction: column;
+        gap: 16px;
+    }
+}

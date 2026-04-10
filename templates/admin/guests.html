@@ -1,0 +1,175 @@
+{% extends "admin/base.html" %}
+{% set active_page = 'guests' %}
+
+{% block title %}Гости - Бронь Кинг{% endblock %}
+{% block page_title %}Гости{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/admin/guests.css">
+{% endblock %}
+
+{% block content %}
+<div class="guests-page">
+    <!-- Статистика -->
+    <div class="guests-stats">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="totalGuests">0</div>
+                <div class="stat-label">Всего гостей</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-crown"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="vipGuests">0</div>
+                <div class="stat-label">VIP</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-star"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="regularGuests">0</div>
+                <div class="stat-label">Постоянные</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-ban"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="blacklistedGuests">0</div>
+                <div class="stat-label">Чёрный список</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Две колонки -->
+    <div class="guests-layout">
+        <!-- Левая колонка - Список -->
+        <div class="guests-list-card">
+            <div class="list-header">
+                <h3><i class="fas fa-list"></i> Список гостей</h3>
+                <div class="list-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="guestSearch" placeholder="Поиск...">
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="GuestManager.openPanel()">
+                        <i class="fas fa-plus"></i> Добавить
+                    </button>
+                </div>
+            </div>
+
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">Все</button>
+                <button class="filter-tab" data-filter="vip"><i class="fas fa-crown"></i> VIP</button>
+                <button class="filter-tab" data-filter="regular"><i class="fas fa-star"></i> Постоянные</button>
+                <button class="filter-tab" data-filter="blacklisted"><i class="fas fa-ban"></i> ЧС</button>
+            </div>
+
+            <select class="sort-select" id="guestSort">
+                <option value="created_desc">Новые сначала</option>
+                <option value="name_asc">По имени (А-Я)</option>
+                <option value="name_desc">По имени (Я-А)</option>
+                <option value="stays_desc">По визитам</option>
+                <option value="spent_desc">По расходам</option>
+            </select>
+
+            <div class="guests-list" id="guestsList">
+                <div class="empty-state">
+                    <div class="spinner"></div>
+                    <p>Загрузка гостей...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правая колонка - Детали -->
+        <div class="guests-detail-card">
+            <div class="detail-header">
+                <h3><i class="fas fa-user"></i> Информация о госте</h3>
+            </div>
+            <div class="detail-body" id="guestDetailContent">
+                <div class="empty-state">
+                    <i class="fas fa-user-circle"></i>
+                    <p>Выберите гостя из списка</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Слайд-панель -->
+<div class="slide-overlay" id="slideOverlay" onclick="GuestManager.closePanel()"></div>
+<div class="slide-panel" id="slidePanel">
+    <div class="slide-header">
+        <h3 id="panelTitle"><i class="fas fa-user-plus"></i> Новый гость</h3>
+        <button class="btn-icon" onclick="GuestManager.closePanel()">&times;</button>
+    </div>
+    <div class="slide-body">
+        <form id="guestForm" onsubmit="return false;">
+            <input type="hidden" id="guestId">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Фамилия *</label>
+                    <input type="text" class="form-control" id="lastName" placeholder="Иванов">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Имя *</label>
+                    <input type="text" class="form-control" id="firstName" placeholder="Иван">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Отчество</label>
+                <input type="text" class="form-control" id="middleName" placeholder="Иванович">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Телефон *</label>
+                    <input type="tel" class="form-control" id="phone" placeholder="+7 (999) 123-45-67">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-control" id="email" placeholder="guest@mail.ru">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Дата рождения</label>
+                    <input type="date" class="form-control" id="birthDate">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Статус</label>
+                    <select class="form-control" id="guestType">
+                        <option value="regular">Обычный</option>
+                        <option value="vip">VIP</option>
+                        <option value="corporate">Корпоративный</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Заметки</label>
+                <textarea class="form-control" id="notes" rows="2" placeholder="Особые пожелания..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-checkbox">
+                    <input type="checkbox" id="blacklisted">
+                    <span style="color: #ef4444;"><i class="fas fa-ban"></i> Добавить в чёрный список</span>
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button type="button" class="btn btn-outline" style="flex: 1;" onclick="GuestManager.closePanel()">Отмена</button>
+                <button type="button" class="btn btn-primary" style="flex: 1;" onclick="GuestManager.save()">Сохранить</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/static/js/admin/guests.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => GuestManager.init());</script>
+{% endblock %}

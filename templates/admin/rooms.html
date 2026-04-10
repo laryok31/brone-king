@@ -1,0 +1,97 @@
+{% extends "admin/base.html" %}
+{% set active_page = 'rooms' %}
+
+{% block title %}Номера - Бронь Кинг{% endblock %}
+{% block page_title %}Управление номерами{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-door-open"></i></div>
+        <div class="stat-content">
+            <div class="stat-label">Всего номеров</div>
+            <div class="stat-value" id="totalRoomsStat">-</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="stat-content">
+            <div class="stat-label">Свободно</div>
+            <div class="stat-value" id="availableRoomsStat">-</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <div class="stat-content">
+            <div class="stat-label">Занято</div>
+            <div class="stat-value" id="occupiedRoomsStat">-</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-broom"></i></div>
+        <div class="stat-content">
+            <div class="stat-label">Уборка</div>
+            <div class="stat-value" id="cleaningRoomsStat">-</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3><i class="fas fa-list"></i> Список номеров</h3>
+        <button class="btn btn-primary" onclick="RoomsManager.openModal()">
+            <i class="fas fa-plus"></i> Добавить номер
+        </button>
+    </div>
+
+    <div class="filters-bar">
+        <select class="form-control" id="statusFilter" style="width: 180px;">
+            <option value="">Все статусы</option>
+            <option value="available">Свободен</option>
+            <option value="occupied">Занят</option>
+            <option value="cleaning">Уборка</option>
+        </select>
+        <select class="form-control" id="typeFilter" style="width: 180px;">
+            <option value="">Все типы</option>
+            <option value="standard">Стандарт</option>
+            <option value="superior">Улучшенный</option>
+            <option value="deluxe">Делюкс</option>
+            <option value="suite">Люкс</option>
+        </select>
+        <button class="btn btn-outline" onclick="RoomsManager.resetFilters()">
+            <i class="fas fa-times"></i> Сбросить
+        </button>
+    </div>
+    <!-- В actions добавить -->
+    <button class="btn btn-outline btn-sm" onclick="RoomsManager.markCleaned(${room.id})">
+        <i class="fas fa-check-circle"></i> Убрано
+    </button>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Номер</th>
+                <th>Тип</th>
+                <th>Этаж</th>
+                <th>Вместимость</th>
+                <th>Цена/ночь</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody id="roomsTableBody">
+            <tr><td colspan="7" class="text-center p-6">Загрузка...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% include "admin/components/room-modal.html" %}
+
+<script src="/static/js/admin/rooms.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        RoomsManager.init();
+    });
+</script>
+{% endblock %}

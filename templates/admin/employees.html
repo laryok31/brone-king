@@ -1,0 +1,177 @@
+{% extends "admin/base.html" %}
+{% set active_page = 'employees' %}
+
+{% block title %}Сотрудники - Бронь Кинг{% endblock %}
+{% block page_title %}Управление персоналом{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/admin/employees.css">
+{% endblock %}
+
+{% block content %}
+<div class="employees-page">
+    <!-- Статистика -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="totalEmployees">0</div>
+                <div class="stat-label">Сотрудников</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-broom"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="maidsCount">0</div>
+                <div class="stat-label">Горничных</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-ruble-sign"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="monthSalary">0 ₽</div>
+                <div class="stat-label">Фонд оплаты</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+            <div class="stat-content">
+                <div class="stat-value" id="pendingTasks">0</div>
+                <div class="stat-label">Заданий на проверке</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Вкладки -->
+    <div class="employees-tabs">
+        <button class="tab-btn active" data-tab="employees">
+            <i class="fas fa-users"></i> Сотрудники
+        </button>
+        <button class="tab-btn" data-tab="checklists">
+            <i class="fas fa-clipboard-list"></i> Чек-листы
+        </button>
+        <button class="tab-btn" data-tab="tasks">
+            <i class="fas fa-tasks"></i> Задания
+        </button>
+        <button class="tab-btn" data-tab="salary">
+            <i class="fas fa-calculator"></i> Расчёт зарплат
+        </button>
+    </div>
+
+    <!-- Панель сотрудников -->
+    <div class="tab-panel active" id="panelEmployees">
+        <div class="panel-header">
+            <h3>Список сотрудников</h3>
+            <button class="btn btn-primary" onclick="EmployeesManager.openEmployeeModal()">
+                <i class="fas fa-plus"></i> Добавить сотрудника
+            </button>
+        </div>
+        <div class="employees-grid" id="employeesGrid"></div>
+    </div>
+
+    <!-- Панель чек-листов -->
+    <div class="tab-panel" id="panelChecklists">
+        <div class="panel-header">
+            <h3>Чек-листы для должностей</h3>
+            <button class="btn btn-primary" onclick="EmployeesManager.openChecklistModal()">
+                <i class="fas fa-plus"></i> Создать чек-лист
+            </button>
+        </div>
+        <div class="checklists-grid" id="checklistsGrid"></div>
+    </div>
+
+    <!-- Панель заданий -->
+    <div class="tab-panel" id="panelTasks">
+        <div class="panel-header">
+            <h3>Задания сотрудников</h3>
+            <button class="btn btn-primary" onclick="EmployeesManager.openTaskModal()">
+                <i class="fas fa-plus"></i> Назначить задание
+            </button>
+        </div>
+        <div class="tasks-filters">
+            <select id="taskStatusFilter" class="form-control">
+                <option value="">Все статусы</option>
+                <option value="pending">Ожидает</option>
+                <option value="completed">Выполнено</option>
+                <option value="approved">Утверждено</option>
+            </select>
+            <select id="taskEmployeeFilter" class="form-control"></select>
+        </div>
+        <div class="tasks-list" id="tasksList"></div>
+    </div>
+
+    <!-- Панель расчёта зарплат -->
+    <div class="tab-panel" id="panelSalary">
+        <div class="panel-header">
+            <h3>Расчёт заработной платы</h3>
+            <div class="period-selector">
+                <input type="date" id="salaryStartDate" class="form-control">
+                <span>—</span>
+                <input type="date" id="salaryEndDate" class="form-control">
+                <button class="btn btn-primary" onclick="EmployeesManager.calculateSalary()">
+                    <i class="fas fa-calculator"></i> Рассчитать
+                </button>
+                <button class="btn btn-outline" onclick="EmployeesManager.exportSalaryReport()">
+                    <i class="fas fa-download"></i> Экспорт
+                </button>
+            </div>
+        </div>
+        <div class="salary-report" id="salaryReport"></div>
+    </div>
+</div>
+
+<!-- Модалки -->
+<div class="modal" id="employeeModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Новый сотрудник</h3>
+            <button class="modal-close" onclick="UI.closeModal('employeeModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="employeeForm">
+                <div class="form-group">
+                    <label class="form-label">ФИО *</label>
+                    <input type="text" class="form-control" id="empFullName" placeholder="Иванов Иван Иванович">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Должность *</label>
+                    <select class="form-control" id="empPosition">
+                        <option value="maid">Горничная</option>
+                        <option value="receptionist">Администратор</option>
+                        <option value="manager">Управляющий</option>
+                        <option value="technician">Техник</option>
+                        <option value="cook">Повар</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Телефон</label>
+                        <input type="tel" class="form-control" id="empPhone">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="empEmail">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Оклад (₽/мес)</label>
+                        <input type="number" class="form-control" id="empBaseSalary" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ставка (₽/час)</label>
+                        <input type="number" class="form-control" id="empHourlyRate" value="0">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="UI.closeModal('employeeModal')">Отмена</button>
+            <button class="btn btn-primary" onclick="EmployeesManager.saveEmployee()">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/admin/employees.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => EmployeesManager.init());</script>
+{% endblock %}

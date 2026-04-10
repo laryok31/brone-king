@@ -1,0 +1,299 @@
+{% extends "admin/base.html" %}
+{% set active_page = 'finance' %}
+
+{% block title %}Финансы - Бронь Кинг{% endblock %}
+{% block page_title %}Финансовый учёт{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/admin/finance.css">
+{% endblock %}
+
+{% block content %}
+<div class="finance-page">
+    <!-- Статистика -->
+    <div class="finance-stats">
+        <div class="finance-stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: #10b981;"><i class="fas fa-arrow-up"></i></div>
+                <span class="stat-label">Доходы</span>
+            </div>
+            <div class="stat-value-large" id="totalIncome">0 ₽</div>
+            <div class="stat-detail">🏨 Брони: <span id="bookingsRevenue">0 ₽</span></div>
+        </div>
+        <div class="finance-stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: #ef4444;"><i class="fas fa-arrow-down"></i></div>
+                <span class="stat-label">Расходы</span>
+            </div>
+            <div class="stat-value-large" id="totalExpense">0 ₽</div>
+            <div class="stat-detail">📦 Закупки: <span id="inventoryPurchases">0 ₽</span></div>
+        </div>
+        <div class="finance-stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: #6366f1;"><i class="fas fa-wallet"></i></div>
+                <span class="stat-label">Баланс</span>
+            </div>
+            <div class="stat-value-large" id="balance">0 ₽</div>
+            <div class="stat-detail">👥 Зарплаты: <span id="salariesTotal">0 ₽</span></div>
+        </div>
+        <div class="finance-stat-card">
+            <div class="stat-header">
+                <div class="stat-icon" style="background: #f59e0b;"><i class="fas fa-chart-pie"></i></div>
+                <span class="stat-label">Маржинальность</span>
+            </div>
+            <div class="stat-value-large" id="profitMargin">—</div>
+            <div class="stat-detail">Прибыль / Доход</div>
+        </div>
+    </div>
+    <!-- Умные подсказки -->
+    <div class="suggestions-bar" id="suggestionsBar">
+        <div class="suggestions-header">
+            <i class="fas fa-robot"></i>
+            <span>Умный помощник</span>
+        </div>
+        <div class="suggestions-list" id="suggestionsList">
+            <div class="suggestion-item">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span>Анализирую данные...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Расширенные настройки финансов -->
+    <div class="finance-settings-card">
+        <div class="settings-header" onclick="FinanceManager.toggleSettings()">
+            <h3><i class="fas fa-cog"></i> Настройки финансов</h3>
+            <i class="fas fa-chevron-down" id="settingsChevron"></i>
+        </div>
+        <div class="settings-body" id="financeSettingsBody" style="display: none;">
+            <div class="settings-grid-3">
+                <div class="setting-card">
+                    <h4>Автоматизация</h4>
+                    <div class="setting-item">
+                        <span>Авто-создание дохода при заезде</span>
+                        <label class="switch"><input type="checkbox" id="autoIncome" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="setting-item">
+                        <span>Авто-учёт закупок со склада</span>
+                        <label class="switch"><input type="checkbox" id="autoPurchases" checked><span class="slider"></span></label>
+                    </div>
+                    <div class="setting-item">
+                        <span>Авто-расчёт зарплат</span>
+                        <label class="switch"><input type="checkbox" id="autoSalary"><span class="slider"></span></label>
+                    </div>
+                </div>
+
+                <div class="setting-card">
+                    <h4>Налоги и комиссии</h4>
+                    <div class="setting-item">
+                        <span>НДС (%)</span>
+                        <input type="number" class="form-control" id="vatRate" value="20" style="width: 80px;">
+                    </div>
+                    <div class="setting-item">
+                        <span>Комиссия платёжной системы (%)</span>
+                        <input type="number" class="form-control" id="feeRate" value="2.5" style="width: 80px;">
+                    </div>
+                    <div class="setting-item">
+                        <span>Налог на прибыль (%)</span>
+                        <input type="number" class="form-control" id="profitTax" value="20" style="width: 80px;">
+                    </div>
+                </div>
+
+                <div class="setting-card">
+                    <h4>Отчётность</h4>
+                    <div class="setting-item">
+                        <span>Финансовый год начинается</span>
+                        <select class="form-control" id="fiscalYearStart">
+                            <option value="1">Январь</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <span>Валюта отчётов</span>
+                        <select class="form-control" id="reportCurrency">
+                            <option value="RUB">₽ RUB</option>
+                            <option value="USD">$ USD</option>
+                            <option value="EUR">€ EUR</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Период -->
+    <div class="period-selector">
+        <button class="period-btn active" data-period="month">Месяц</button>
+        <button class="period-btn" data-period="quarter">Квартал</button>
+        <button class="period-btn" data-period="year">Год</button>
+        <div class="custom-period">
+            <input type="date" id="financeStartDate">
+            <span>—</span>
+            <input type="date" id="financeEndDate">
+            <button class="btn btn-primary btn-sm" onclick="FinanceManager.applyCustomPeriod()">Применить</button>
+        </div>
+    </div>
+
+    <!-- Вкладки -->
+    <div class="finance-tabs">
+        <button class="finance-tab active" data-tab="transactions">
+            <i class="fas fa-list"></i> Транзакции
+        </button>
+        <button class="finance-tab" data-tab="employees">
+            <i class="fas fa-users"></i> Сотрудники
+        </button>
+        <button class="finance-tab" data-tab="salary">
+            <i class="fas fa-calculator"></i> Зарплаты
+        </button>
+    </div>
+
+    <!-- Панели -->
+    <div class="finance-panels">
+        <!-- Транзакции -->
+        <div class="finance-panel active" id="panelTransactions">
+            <div class="panel-header">
+                <h3><i class="fas fa-list"></i> Последние транзакции</h3>
+                <div class="panel-actions">
+                    <button class="btn btn-outline btn-sm" onclick="FinanceManager.openTransactionPanel('income')">
+                        <i class="fas fa-plus"></i> Доход
+                    </button>
+                    <button class="btn btn-outline btn-sm" onclick="FinanceManager.openTransactionPanel('expense')">
+                        <i class="fas fa-minus"></i> Расход
+                    </button>
+                </div>
+            </div>
+            <div class="transactions-list" id="transactionsList">
+                <div class="empty-state">Загрузка транзакций...</div>
+            </div>
+        </div>
+
+        <!-- Сотрудники -->
+        <div class="finance-panel" id="panelEmployees">
+            <div class="panel-header">
+                <h3><i class="fas fa-users"></i> Сотрудники</h3>
+                <button class="btn btn-primary btn-sm" onclick="FinanceManager.openEmployeeModal()">
+                    <i class="fas fa-plus"></i> Добавить
+                </button>
+            </div>
+            <div class="employees-grid" id="employeesGrid">
+                <div class="empty-state">Загрузка сотрудников...</div>
+            </div>
+        </div>
+
+        <!-- Зарплаты -->
+        <div class="finance-panel" id="panelSalary">
+            <div class="panel-header">
+                <h3><i class="fas fa-calculator"></i> Расчёт зарплат</h3>
+                <div class="period-selector-inline">
+                    <input type="date" id="salaryStartDate" class="form-control">
+                    <span>—</span>
+                    <input type="date" id="salaryEndDate" class="form-control">
+                    <button class="btn btn-primary btn-sm" onclick="FinanceManager.calculateSalary()">Рассчитать</button>
+                    <button class="btn btn-outline btn-sm" onclick="FinanceManager.exportSalaryReport()">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="salary-report" id="salaryReport">
+                <div class="empty-state">Выберите период для расчёта</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модалка сотрудника -->
+<div class="modal" id="employeeModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Новый сотрудник</h3>
+            <button class="modal-close" onclick="UI.closeModal('employeeModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="employeeForm">
+                <div class="form-group">
+                    <label class="form-label">ФИО *</label>
+                    <input type="text" class="form-control" id="empFullName" placeholder="Иванов Иван">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Должность *</label>
+                    <select class="form-control" id="empPosition">
+                        <option value="maid">Горничная</option>
+                        <option value="receptionist">Администратор</option>
+                        <option value="manager">Управляющий</option>
+                        <option value="technician">Техник</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Телефон</label>
+                        <input type="tel" class="form-control" id="empPhone">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="empEmail">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Оклад (₽/мес)</label>
+                        <input type="number" class="form-control" id="empBaseSalary" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ставка (₽/час)</label>
+                        <input type="number" class="form-control" id="empHourlyRate" value="0">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="UI.closeModal('employeeModal')">Отмена</button>
+            <button class="btn btn-primary" onclick="FinanceManager.saveEmployee()">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модалка транзакции -->
+<div class="modal" id="transactionModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="transactionModalTitle">Новая транзакция</h3>
+            <button class="modal-close" onclick="UI.closeModal('transactionModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="transactionForm">
+                <input type="hidden" id="transactionType" value="expense">
+                <div class="form-group">
+                    <label class="form-label">Категория *</label>
+                    <select class="form-control" id="transactionCategory" required></select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Сумма (₽) *</label>
+                    <input type="number" class="form-control" id="transactionAmount" min="0" step="100" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Описание</label>
+                    <input type="text" class="form-control" id="transactionDesc" placeholder="Например: Оплата интернета">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Способ оплаты</label>
+                    <select class="form-control" id="paymentMethod">
+                        <option value="cash">Наличные</option>
+                        <option value="card">Карта</option>
+                        <option value="transfer">Перевод</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Дата</label>
+                    <input type="date" class="form-control" id="transactionDate">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="UI.closeModal('transactionModal')">Отмена</button>
+            <button class="btn btn-primary" onclick="FinanceManager.saveTransaction()">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/admin/finance.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => FinanceManager.init());</script>
+{% endblock %}
